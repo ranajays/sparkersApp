@@ -39,7 +39,7 @@
     });
 
     // block until username is answered
-    var username = window.prompt("Welcome, warrior! please declare your name?");
+    var username = "";//window.prompt("Welcome, warrior! please declare your name?");
     if(!username){
       username = "anonymous"+Math.floor(Math.random()*1111);
     }
@@ -284,15 +284,18 @@
     // FB.api('/me/statuses?limit=1', function(response) {
     //   console.log(JSON.stringify(response));
     // });
-    // FB.api('/me/videos?limit=1', function(response) {
-    //   console.log(JSON.stringify(response));
-    // });
-    // FB.api('/me/photos?limit=1', function(response) {
-    //   console.log(JSON.stringify(response));
-    // });
-    // FB.api('/me/videos?limit=1', function(response) {
-    //   console.log(JSON.stringify(response));
-    // });
+    FB.api('/me/photos?limit=1&fields=name,source,link', function(response) {
+      var pic = response["data"][0];
+      console.log(JSON.stringify(pic));
+      $('#sparkPhoto').append('<img src="'+pic["source"]+'"" class="fit_spark"><br/>');
+      $('#sparkPhoto').append('<a href="'+pic["link"]+'"">'+pic["name"]+"</a>");
+    });
+    FB.api('/me/videos?limit=1&fields=id,name', function(response) {
+      var video = response["data"][0];
+      console.log(JSON.stringify(video));
+      $("#sparkVideo").append('<iframe src="https://www.facebook.com/video/embed?video_id='+video["id"]+'" height="130" frameborder="0"></iframe><br/>');
+      $('#sparkVideo').append('<a href="https://www.facebook.com/video/embed?video_id='+video["id"]+'">'+video["name"]+"</a>");
+    });
     // FB.api('/me/tagged_places?limit=1', function(response) {
     //   console.log(JSON.stringify(response));
     // });
