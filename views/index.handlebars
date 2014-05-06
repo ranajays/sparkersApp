@@ -1,4 +1,9 @@
-  <div>Welcome to {{title}}, enable camera to post video emoji!</div>
+  
+ <div>Welcome to {{title}}, enable camera to post video emoji!</div>
+  <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+</fb:login-button>
+<div id="status">
+</div>
   <div id="waiting">Connecting to chat server...</div>
   <div id="second_counter"></div>
   <div id="conversation"></div>
