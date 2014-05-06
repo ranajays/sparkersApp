@@ -8,7 +8,7 @@
 
   $(document).ready(function(){
     connect_to_chat_firebase();
-    connect_webcam();
+    // connect_webcam();
   });
 
   function connect_to_chat_firebase(){
@@ -49,11 +49,12 @@
     // bind submission box
     $("#submission input").keydown(function( event ) {
       if (event.which == 13) {
-        if(has_emotions($(this).val())){
-          fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color});
-        }else{
-          fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
-        }
+        // if(has_emotions($(this).val())){
+        //   fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color});
+        // }else{
+        //   fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
+        // }
+        fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
         $(this).val("");
         scroll_to_bottom(0);
       }
@@ -66,26 +67,26 @@
   // creates a message node and appends it to the conversation
   function display_msg(data){
     $("#conversation").append("<div class='msg' style='color:"+data.c+"'>"+data.m+"</div>");
-    if(data.v){
-      // for video element
-      var video = document.createElement("video");
-      video.autoplay = true;
-      video.controls = false; // optional
-      video.loop = true;
-      video.width = 120;
+    // if(data.v){
+    //   // for video element
+    //   var video = document.createElement("video");
+    //   video.autoplay = true;
+    //   video.controls = false; // optional
+    //   video.loop = true;
+    //   video.width = 120;
 
-      var source = document.createElement("source");
-      source.src =  URL.createObjectURL(base64_to_blob(data.v));
-      source.type =  "video/webm";
+    //   var source = document.createElement("source");
+    //   source.src =  URL.createObjectURL(base64_to_blob(data.v));
+    //   source.type =  "video/webm";
 
-      video.appendChild(source);
+    //   video.appendChild(source);
 
-      // for gif instead, use this code below and change mediaRecorder.mimeType in onMediaSuccess below
-      // var video = document.createElement("img");
-      // video.src = URL.createObjectURL(base64_to_blob(data.v));
+    //   // for gif instead, use this code below and change mediaRecorder.mimeType in onMediaSuccess below
+    //   // var video = document.createElement("img");
+    //   // video.src = URL.createObjectURL(base64_to_blob(data.v));
 
-      document.getElementById("conversation").appendChild(video);
-    }
+    //   document.getElementById("conversation").appendChild(video);
+    // }
   }
 
   function scroll_to_bottom(wait_time){
@@ -95,73 +96,73 @@
     },wait_time);
   }
 
-  function connect_webcam(){
-    // we're only recording video, not audio
-    var mediaConstraints = {
-      video: true,
-      audio: false
-    };
+  // function connect_webcam(){
+  //   // we're only recording video, not audio
+  //   var mediaConstraints = {
+  //     video: true,
+  //     audio: false
+  //   };
 
-    // callback for when we get video stream from user.
-    var onMediaSuccess = function(stream) {
-      // create video element, attach webcam stream to video element
-      var video_width= 160;
-      var video_height= 120;
-      var webcam_stream = document.getElementById('webcam_stream');
-      var video = document.createElement('video');
-      webcam_stream.innerHTML = "";
-      // adds these properties to the video
-      video = mergeProps(video, {
-          controls: false,
-          width: video_width,
-          height: video_height,
-          src: URL.createObjectURL(stream)
-      });
-      video.play();
-      webcam_stream.appendChild(video);
+  //   // callback for when we get video stream from user.
+  //   var onMediaSuccess = function(stream) {
+  //     // create video element, attach webcam stream to video element
+  //     var video_width= 160;
+  //     var video_height= 120;
+  //     var webcam_stream = document.getElementById('webcam_stream');
+  //     var video = document.createElement('video');
+  //     webcam_stream.innerHTML = "";
+  //     // adds these properties to the video
+  //     video = mergeProps(video, {
+  //         controls: false,
+  //         width: video_width,
+  //         height: video_height,
+  //         src: URL.createObjectURL(stream)
+  //     });
+  //     video.play();
+  //     webcam_stream.appendChild(video);
 
-      // counter
-      var time = 0;
-      var second_counter = document.getElementById('second_counter');
-      var second_counter_update = setInterval(function(){
-        second_counter.innerHTML = time++;
-      },1000);
+  //     // counter
+  //     var time = 0;
+  //     var second_counter = document.getElementById('second_counter');
+  //     var second_counter_update = setInterval(function(){
+  //       second_counter.innerHTML = time++;
+  //     },1000);
 
-      // now record stream in 5 seconds interval
-      var video_container = document.getElementById('video_container');
-      var mediaRecorder = new MediaStreamRecorder(stream);
-      var index = 1;
+  //     // now record stream in 5 seconds interval
+  //     var video_container = document.getElementById('video_container');
+  //     var mediaRecorder = new MediaStreamRecorder(stream);
+  //     var index = 1;
 
-      mediaRecorder.mimeType = 'video/webm';
-      // mediaRecorder.mimeType = 'image/gif';
-      // make recorded media smaller to save some traffic (80 * 60 pixels, 3*24 frames)
-      mediaRecorder.video_width = video_width/2;
-      mediaRecorder.video_height = video_height/2;
+  //     mediaRecorder.mimeType = 'video/webm';
+  //     // mediaRecorder.mimeType = 'image/gif';
+  //     // make recorded media smaller to save some traffic (80 * 60 pixels, 3*24 frames)
+  //     mediaRecorder.video_width = video_width/2;
+  //     mediaRecorder.video_height = video_height/2;
 
-      mediaRecorder.ondataavailable = function (blob) {
-          //console.log("new data available!");
-          video_container.innerHTML = "";
+  //     mediaRecorder.ondataavailable = function (blob) {
+  //         //console.log("new data available!");
+  //         video_container.innerHTML = "";
 
-          // convert data into base 64 blocks
-          blob_to_base64(blob,function(b64_data){
-            cur_video_blob = b64_data;
-          });
-      };
-      setInterval( function() {
-        mediaRecorder.stop();
-        mediaRecorder.start(3000);
-      }, 3000 );
-      console.log("connect to media stream!");
-    }
+  //         // convert data into base 64 blocks
+  //         blob_to_base64(blob,function(b64_data){
+  //           cur_video_blob = b64_data;
+  //         });
+  //     };
+  //     setInterval( function() {
+  //       mediaRecorder.stop();
+  //       mediaRecorder.start(3000);
+  //     }, 3000 );
+  //     console.log("connect to media stream!");
+  //   }
 
-    // callback if there is an error when we try and get the video stream
-    var onMediaError = function(e) {
-      console.error('media error', e);
-    }
+  //   // callback if there is an error when we try and get the video stream
+  //   var onMediaError = function(e) {
+  //     console.error('media error', e);
+  //   }
 
-    // get video stream from user. see https://github.com/streamproc/MediaStreamRecorder
-    navigator.getUserMedia(mediaConstraints, onMediaSuccess, onMediaError);
-  }
+  //   // get video stream from user. see https://github.com/streamproc/MediaStreamRecorder
+  //   navigator.getUserMedia(mediaConstraints, onMediaSuccess, onMediaError);
+  // }
 
   // check to see if a message qualifies to be replaced with video.
   var has_emotions = function(msg){
@@ -278,5 +279,21 @@
       console.log('Good to see you, ' + response.name + '.');
       document.getElementById('status').innerHTML = 'Good to see you, ' +
         response.name;
+      // username = response.name;
     });
+    // FB.api('/me/statuses?limit=1', function(response) {
+    //   console.log(JSON.stringify(response));
+    // });
+    // FB.api('/me/videos?limit=1', function(response) {
+    //   console.log(JSON.stringify(response));
+    // });
+    // FB.api('/me/photos?limit=1', function(response) {
+    //   console.log(JSON.stringify(response));
+    // });
+    // FB.api('/me/videos?limit=1', function(response) {
+    //   console.log(JSON.stringify(response));
+    // });
+    // FB.api('/me/tagged_places?limit=1', function(response) {
+    //   console.log(JSON.stringify(response));
+    // });
   }
