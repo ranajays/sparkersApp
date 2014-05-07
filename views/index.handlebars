@@ -1,13 +1,15 @@
   
  <div>Welcome to {{title}}, login to Facebook to have your conversation sparked!</div>
+ <div id="fb_button">
   <fb:login-button scope="public_profile,email,user_events,user_likes,user_photos,user_tagged_places,user_videos" onlogin="checkLoginState();">
 </fb:login-button>
+</div>
 <div id="status">
 </div>
   <div id="waiting">Connecting to chat server...</div>
   <div id="second_counter"></div>
   <div id="conversation"></div>
-  <div id="sparkers">
+  <div id="sparkers" style="display: none;">
   	<div id="sparkPhoto" class="spark"><h4>Photo Tagged</h4></div>
   	<div id="sparkPhotoUp" class="spark"><h4>Photo Uploaded</h4></div>	
   	<div id="sparkVideo" class="spark"><h4>Video Tagged</h4></div>

@@ -1,5 +1,6 @@
 // Initial code by Borui Wang, updated by Graham Roth
 // For CS247, Spring 2014
+var username;
 
 (function() {
 
@@ -39,13 +40,18 @@
     });
 
     // block until username is answered
-    var username = "";//window.prompt("Welcome, warrior! please declare your name?");
+    username = "";//window.prompt("Welcome, warrior! please declare your name?");
     if(!username){
       username = "anonymous"+Math.floor(Math.random()*1111);
     }
     fb_instance_users.push({ name: username,c: my_color});
     $("#waiting").remove();
 
+    $('.spark').click(function(){
+      var htmlString = $(this).html().substring($(this).html().indexOf('</h4>')+5);
+      fb_instance_stream.push({m:username+": <br/><br/>" +htmlString, c: my_color});
+      $('#sparkers').hide();
+    });
     // bind submission box
     $("#submission input").keydown(function( event ) {
       if (event.which == 13) {
@@ -62,11 +68,16 @@
 
     // scroll to bottom in case there is already content
     scroll_to_bottom(1300);
+    $('#sparkers').hide();
   }
 
   // creates a message node and appends it to the conversation
   function display_msg(data){
     $("#conversation").append("<div class='msg' style='color:"+data.c+"'>"+data.m+"</div>");
+    // console.log(username);
+    if (data.m.indexOf(username) != 0 && has_spark(data.m)){
+      $('#sparkers').show();
+    }
     // if(data.v){
     //   // for video element
     //   var video = document.createElement("video");
@@ -165,8 +176,8 @@
   // }
 
   // check to see if a message qualifies to be replaced with video.
-  var has_emotions = function(msg){
-    var options = ["lol",":)",":("];
+  var has_spark = function(msg){
+    var options = ["it going?","re you doing?","s up?", "how are you?", "what's new?"];
     for(var i=0;i<options.length;i++){
       if(msg.indexOf(options[i])!= -1){
         return true;
@@ -276,48 +287,50 @@
   function testAPI() {
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
-      console.log('Good to see you, ' + response.name + '.');
+      // console.log('Good to see you, ' + response.name + '.');
       document.getElementById('status').innerHTML = 'Good to see you, ' +
         response.name;
       // username = response.name;
     });
     FB.api('/me/likes?limit=1&fields=id,name', function(response) {
       var like = response["data"][0];
-      console.log(JSON.stringify(like));
+      // console.log(JSON.stringify(like));
       FB.api('/'+like["id"]+'/picture?redirect=false&height=140', function(response) {
-        console.log(JSON.stringify(response));
+        // console.log(JSON.stringify(response));
         $('#sparkLike').append('<img src="'+response["data"]["url"]+'"" class="fit_spark"><br/>');
-        $('#sparkLike').append('<a href="https://www.facebook.com/'+like["id"]+'">'+like["name"]+"</a>");
+        $('#sparkLike').append('<a href="https://www.facebook.com/'+like["id"]+'" target="_blank">'+like["name"]+"</a>");
       });
     });
     FB.api('/me/statuses?limit=1&fields=id,message,from', function(response) {
       var status = response["data"][0];
-      console.log(JSON.stringify(status));
-      $('#sparkStatus').append('<a href="https://www.facebook.com/'+status["from"]["id"]+'_'+status["id"]+'">'+status["message"]+"</a>");
+      // console.log(JSON.stringify(status));
+      $('#sparkStatus').append('<a href="https://www.facebook.com/'+status["from"]["id"]+'_'+status["id"]+'" target="_blank">'+status["message"]+"</a>");
     });
     FB.api('/me/photos?limit=1&fields=name,source,link', function(response) {
       var pic = response["data"][0];
-      console.log(JSON.stringify(pic));
+      // console.log(JSON.stringify(pic));
       $('#sparkPhoto').append('<img src="'+pic["source"]+'"" class="fit_spark"><br/>');
-      $('#sparkPhoto').append('<a href="'+pic["link"]+'"">'+pic["name"]+"</a>");
+      $('#sparkPhoto').append('<a href="'+pic["link"]+'"" target="_blank">'+pic["name"]+"</a>");
     });
     FB.api('/me/photos/uploaded?limit=1&fields=name,source,link', function(response) {
       var pic = response["data"][0];
-      console.log(JSON.stringify(pic));
+      // console.log(JSON.stringify(pic));
       $('#sparkPhotoUp').append('<img src="'+pic["source"]+'"" class="fit_spark"><br/>');
-      $('#sparkPhotoUp').append('<a href="'+pic["link"]+'"">'+pic["name"]+"</a>");
+      $('#sparkPhotoUp').append('<a href="'+pic["link"]+'"" target="_blank">'+pic["name"]+"</a>");
     });
     FB.api('/me/videos?limit=1&fields=id,name,from', function(response) {
       var video = response["data"][0];
-      console.log(JSON.stringify(video));
+      // console.log(JSON.stringify(video));
       $("#sparkVideo").append('<iframe src="https://www.facebook.com/video/embed?video_id='+video["id"]+'" height="130" frameborder="0"></iframe><br/>');
-      $('#sparkVideo').append('<a href="https://www.facebook.com/'+video["from"]["id"]+'_'+video["id"]+'">'+video["name"]+"</a>");
+      $('#sparkVideo').append('<a href="https://www.facebook.com/'+video["from"]["id"]+'_'+video["id"]+'" target="_blank">'+video["name"]+"</a>");
     });
     FB.api('/me/tagged_places?limit=1', function(response) {
       var tagged_place = response["data"][0];
-      console.log(JSON.stringify(tagged_place));
+      // console.log(JSON.stringify(tagged_place));
       var map = new GMap2(document.getElementById("map"));
       map.setCenter(new GLatLng(tagged_place["place"]["location"]["latitude"], tagged_place["place"]["location"]["longitude"]), 16);
-      $('#sparkMap').append('<a href="https://www.facebook.com/'+tagged_place["place"]["id"]+'">'+tagged_place["place"]["name"]+"</a>");
+      $('#sparkMap').append('<a href="https://www.facebook.com/'+tagged_place["place"]["id"]+'" target="_blank">'+tagged_place["place"]["name"]+"</a>");
     });
+    $('#sparkers').hide();
+    $('#fb_button').hide();
   }
