@@ -281,22 +281,43 @@
         response.name;
       // username = response.name;
     });
-    // FB.api('/me/statuses?limit=1', function(response) {
-    //   console.log(JSON.stringify(response));
-    // });
+    FB.api('/me/likes?limit=1&fields=id,name', function(response) {
+      var like = response["data"][0];
+      console.log(JSON.stringify(like));
+      FB.api('/'+like["id"]+'/picture?redirect=false&height=140', function(response) {
+        console.log(JSON.stringify(response));
+        $('#sparkLike').append('<img src="'+response["data"]["url"]+'"" class="fit_spark"><br/>');
+        $('#sparkLike').append('<a href="https://www.facebook.com/'+like["id"]+'">'+like["name"]+"</a>");
+      });
+    });
+    FB.api('/me/statuses?limit=1&fields=id,message,from', function(response) {
+      var status = response["data"][0];
+      console.log(JSON.stringify(status));
+      $('#sparkStatus').append('<a href="https://www.facebook.com/'+status["from"]["id"]+'_'+status["id"]+'">'+status["message"]+"</a>");
+    });
     FB.api('/me/photos?limit=1&fields=name,source,link', function(response) {
       var pic = response["data"][0];
       console.log(JSON.stringify(pic));
       $('#sparkPhoto').append('<img src="'+pic["source"]+'"" class="fit_spark"><br/>');
       $('#sparkPhoto').append('<a href="'+pic["link"]+'"">'+pic["name"]+"</a>");
     });
-    FB.api('/me/videos?limit=1&fields=id,name', function(response) {
+    FB.api('/me/photos/uploaded?limit=1&fields=name,source,link', function(response) {
+      var pic = response["data"][0];
+      console.log(JSON.stringify(pic));
+      $('#sparkPhotoUp').append('<img src="'+pic["source"]+'"" class="fit_spark"><br/>');
+      $('#sparkPhotoUp').append('<a href="'+pic["link"]+'"">'+pic["name"]+"</a>");
+    });
+    FB.api('/me/videos?limit=1&fields=id,name,from', function(response) {
       var video = response["data"][0];
       console.log(JSON.stringify(video));
       $("#sparkVideo").append('<iframe src="https://www.facebook.com/video/embed?video_id='+video["id"]+'" height="130" frameborder="0"></iframe><br/>');
-      $('#sparkVideo').append('<a href="https://www.facebook.com/video/embed?video_id='+video["id"]+'">'+video["name"]+"</a>");
+      $('#sparkVideo').append('<a href="https://www.facebook.com/'+video["from"]["id"]+'_'+video["id"]+'">'+video["name"]+"</a>");
     });
-    // FB.api('/me/tagged_places?limit=1', function(response) {
-    //   console.log(JSON.stringify(response));
-    // });
+    FB.api('/me/tagged_places?limit=1', function(response) {
+      var tagged_place = response["data"][0];
+      console.log(JSON.stringify(tagged_place));
+      var map = new GMap2(document.getElementById("map"));
+      map.setCenter(new GLatLng(tagged_place["place"]["location"]["latitude"], tagged_place["place"]["location"]["longitude"]), 16);
+      $('#sparkMap').append('<a href="https://www.facebook.com/'+tagged_place["place"]["id"]+'">'+tagged_place["place"]["name"]+"</a>");
+    });
   }
