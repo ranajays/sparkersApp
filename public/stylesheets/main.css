@@ -4,7 +4,6 @@ html {
 body {
   margin: 10px;
   font: 15px "Lucida Grande", Helvetica, Arial, sans-serif;
-  height: 90%;
   border-color: #FFEFAD;
   border-style: solid;
   border-radius: 25px;
@@ -108,4 +107,7 @@ a {
 }
 #sparkVideo {
   padding: 10px;
+}
+.redirect {
+  height: 15px;
 }
