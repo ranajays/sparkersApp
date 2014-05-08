@@ -204,8 +204,8 @@ var username;
     });
     FB.api('/me/statuses?limit=1&fields=id,message,from', function(response) {
       var status = response["data"][0];
-      // console.log(JSON.stringify(status));
-      $('#sparkStatusLink').attr("https://www.facebook.com/"+status["from"]["id"]+'_'+status["id"]);
+      console.log(JSON.stringify(status));
+      $('#sparkStatus').append('<a href="https://www.facebook.com/'+status["from"]["id"]+'_'+status["id"]+'">'+status["message"]+"</a>");
     });
     FB.api('/me/photos?limit=1&fields=name,source,link', function(response) {
       var pic = response["data"][0];
