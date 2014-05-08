@@ -48,8 +48,8 @@ var username;
     $("#waiting").remove();
 
     $('.cont').click(function(){
-      var htmlString = $(this).html().substring($(this).html().indexOf('</h4>')+5, $(this).html().indexOf("<br>"));
-      console.log($(this).html().substring($(this).html().indexOf('</h4>')+5, $(this).html().indexOf("<br>")));
+      var htmlString = $(this).html().substring($(this).html().indexOf('</h4>')+5, $(this).html().indexOf("<br"));
+      console.log($(this).html().substring($(this).html().indexOf('</h4>')+5, $(this).html().indexOf("<br")));
       fb_instance_stream.push({m:username+": <br/><br/>" + htmlString, c: my_color});
       $('#sparkers').animate({opacity: 0}, 500);
     });
