@@ -75,6 +75,9 @@ var username;
     if (data.m.indexOf(username) != 0 && has_spark(data.m)){
       $('#sparkers').animate({opacity: 1}, 500);
     }
+    else if (data.m.indexOf(username) === 0 && data.m.indexOf("#show") != -1) {
+      $('#sparkers').animate({opacity: 1}, 500); 
+    }
    
   }
 
@@ -88,7 +91,7 @@ var username;
 
   // check to see if a message qualifies to be replaced with video.
   var has_spark = function(msg){
-    var options = ["it going?","re you doing?","s up?", "how are you?", "what's new?"];
+    var options = ["it going?","re you doing?","s up?", "how are you?", "what's new?", "tell me everything", "sup?"];
     for(var i=0;i<options.length;i++){
       if(msg.indexOf(options[i])!= -1){
         return true;
