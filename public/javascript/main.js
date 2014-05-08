@@ -47,19 +47,16 @@ var username;
     fb_instance_users.push({ name: username,c: my_color});
     $("#waiting").remove();
 
-    $('.spark').click(function(){
-      var htmlString = $(this).html().substring($(this).html().indexOf('</h4>')+5);
-      fb_instance_stream.push({m:username+": <br/><br/>" +htmlString, c: my_color});
-      $('#sparkers').hide();
+    $('.cont').click(function(){
+      var htmlString = $(this).html().substring($(this).html().indexOf('</h4>')+5, $(this).html().indexOf("<br>"));
+      console.log($(this).html().substring($(this).html().indexOf('</h4>')+5, $(this).html().indexOf("<br>")));
+      fb_instance_stream.push({m:username+": <br/><br/>" + htmlString, c: my_color});
+      $('#sparkers').animate({opacity: 0}, 500);
     });
+
     // bind submission box
     $("#submission input").keydown(function( event ) {
       if (event.which == 13) {
-        // if(has_emotions($(this).val())){
-        //   fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color});
-        // }else{
-        //   fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
-        // }
         fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
         $(this).val("");
         scroll_to_bottom(0);
@@ -68,7 +65,7 @@ var username;
 
     // scroll to bottom in case there is already content
     scroll_to_bottom(1300);
-    $('#sparkers').hide();
+    $('#sparkers').animate({opacity: 0}, 500);
   }
 
   // creates a message node and appends it to the conversation
@@ -76,28 +73,9 @@ var username;
     $("#conversation").append("<div class='msg' style='color:"+data.c+"'>"+data.m+"</div>");
     // console.log(username);
     if (data.m.indexOf(username) != 0 && has_spark(data.m)){
-      $('#sparkers').show();
+      $('#sparkers').animate({opacity: 1}, 500);
     }
-    // if(data.v){
-    //   // for video element
-    //   var video = document.createElement("video");
-    //   video.autoplay = true;
-    //   video.controls = false; // optional
-    //   video.loop = true;
-    //   video.width = 120;
-
-    //   var source = document.createElement("source");
-    //   source.src =  URL.createObjectURL(base64_to_blob(data.v));
-    //   source.type =  "video/webm";
-
-    //   video.appendChild(source);
-
-    //   // for gif instead, use this code below and change mediaRecorder.mimeType in onMediaSuccess below
-    //   // var video = document.createElement("img");
-    //   // video.src = URL.createObjectURL(base64_to_blob(data.v));
-
-    //   document.getElementById("conversation").appendChild(video);
-    // }
+   
   }
 
   function scroll_to_bottom(wait_time){
@@ -107,73 +85,6 @@ var username;
     },wait_time);
   }
 
-  // function connect_webcam(){
-  //   // we're only recording video, not audio
-  //   var mediaConstraints = {
-  //     video: true,
-  //     audio: false
-  //   };
-
-  //   // callback for when we get video stream from user.
-  //   var onMediaSuccess = function(stream) {
-  //     // create video element, attach webcam stream to video element
-  //     var video_width= 160;
-  //     var video_height= 120;
-  //     var webcam_stream = document.getElementById('webcam_stream');
-  //     var video = document.createElement('video');
-  //     webcam_stream.innerHTML = "";
-  //     // adds these properties to the video
-  //     video = mergeProps(video, {
-  //         controls: false,
-  //         width: video_width,
-  //         height: video_height,
-  //         src: URL.createObjectURL(stream)
-  //     });
-  //     video.play();
-  //     webcam_stream.appendChild(video);
-
-  //     // counter
-  //     var time = 0;
-  //     var second_counter = document.getElementById('second_counter');
-  //     var second_counter_update = setInterval(function(){
-  //       second_counter.innerHTML = time++;
-  //     },1000);
-
-  //     // now record stream in 5 seconds interval
-  //     var video_container = document.getElementById('video_container');
-  //     var mediaRecorder = new MediaStreamRecorder(stream);
-  //     var index = 1;
-
-  //     mediaRecorder.mimeType = 'video/webm';
-  //     // mediaRecorder.mimeType = 'image/gif';
-  //     // make recorded media smaller to save some traffic (80 * 60 pixels, 3*24 frames)
-  //     mediaRecorder.video_width = video_width/2;
-  //     mediaRecorder.video_height = video_height/2;
-
-  //     mediaRecorder.ondataavailable = function (blob) {
-  //         //console.log("new data available!");
-  //         video_container.innerHTML = "";
-
-  //         // convert data into base 64 blocks
-  //         blob_to_base64(blob,function(b64_data){
-  //           cur_video_blob = b64_data;
-  //         });
-  //     };
-  //     setInterval( function() {
-  //       mediaRecorder.stop();
-  //       mediaRecorder.start(3000);
-  //     }, 3000 );
-  //     console.log("connect to media stream!");
-  //   }
-
-  //   // callback if there is an error when we try and get the video stream
-  //   var onMediaError = function(e) {
-  //     console.error('media error', e);
-  //   }
-
-  //   // get video stream from user. see https://github.com/streamproc/MediaStreamRecorder
-  //   navigator.getUserMedia(mediaConstraints, onMediaSuccess, onMediaError);
-  // }
 
   // check to see if a message qualifies to be replaced with video.
   var has_spark = function(msg){
@@ -255,18 +166,7 @@ var username;
     version    : 'v2.0' // use version 2.0
   });
 
-  // Now that we've initialized the JavaScript SDK, we call 
-  // FB.getLoginStatus().  This function gets the state of the
-  // person visiting this page and can return one of three states to
-  // the callback you provide.  They can be:
-  //
-  // 1. Logged into your app ('connected')
-  // 2. Logged into Facebook, but not your app ('not_authorized')
-  // 3. Not logged into Facebook and can't tell if they are logged into
-  //    your app or not.
-  //
-  // These three cases are handled in the callback function.
-
+  
   FB.getLoginStatus(function(response) {
     statusChangeCallback(response);
   });
@@ -298,39 +198,49 @@ var username;
       FB.api('/'+like["id"]+'/picture?redirect=false&height=140', function(response) {
         // console.log(JSON.stringify(response));
         $('#sparkLike').append('<img src="'+response["data"]["url"]+'"" class="fit_spark"><br/>');
-        $('#sparkLike').append('<a href="https://www.facebook.com/'+like["id"]+'" target="_blank">'+like["name"]+"</a>");
+        var link = "https://www.facebook.com/" + like["id"];
+        $('#sparkLikeLink').attr("href","https://www.facebook.com/" + like["id"]);
       });
     });
     FB.api('/me/statuses?limit=1&fields=id,message,from', function(response) {
       var status = response["data"][0];
       // console.log(JSON.stringify(status));
-      $('#sparkStatus').append('<a href="https://www.facebook.com/'+status["from"]["id"]+'_'+status["id"]+'" target="_blank">'+status["message"]+"</a>");
+      $('#sparkStatusLink').attr("https://www.facebook.com/"+status["from"]["id"]+'_'+status["id"]);
     });
     FB.api('/me/photos?limit=1&fields=name,source,link', function(response) {
       var pic = response["data"][0];
-      // console.log(JSON.stringify(pic));
+      
       $('#sparkPhoto').append('<img src="'+pic["source"]+'"" class="fit_spark"><br/>');
-      $('#sparkPhoto').append('<a href="'+pic["link"]+'"" target="_blank">'+pic["name"]+"</a>");
+      $('#sparkPhotoLink').attr("href", pic["link"]);  
+      
     });
     FB.api('/me/photos/uploaded?limit=1&fields=name,source,link', function(response) {
       var pic = response["data"][0];
-      // console.log(JSON.stringify(pic));
+      
       $('#sparkPhotoUp').append('<img src="'+pic["source"]+'"" class="fit_spark"><br/>');
-      $('#sparkPhotoUp').append('<a href="'+pic["link"]+'"" target="_blank">'+pic["name"]+"</a>");
+      $('#sparkPhotoUpLink').attr("href", pic["link"]);
     });
     FB.api('/me/videos?limit=1&fields=id,name,from', function(response) {
       var video = response["data"][0];
-      // console.log(JSON.stringify(video));
-      $("#sparkVideo").append('<iframe src="https://www.facebook.com/video/embed?video_id='+video["id"]+'" height="130" frameborder="0"></iframe><br/>');
-      $('#sparkVideo').append('<a href="https://www.facebook.com/'+video["from"]["id"]+'_'+video["id"]+'" target="_blank">'+video["name"]+"</a>");
+
+      $("#sparkVideo").append('<iframe src="https://www.facebook.com/video/embed?video_id='+video["id"]+'" width="130" height="130" frameborder="0"></iframe><br/>');
+      $('#sparkVideoLink').attr("href", "https://www.facebook.com/"+video["from"]["id"]+'_'+video["id"]);
     });
     FB.api('/me/tagged_places?limit=1', function(response) {
       var tagged_place = response["data"][0];
-      // console.log(JSON.stringify(tagged_place));
+      
       var map = new GMap2(document.getElementById("map"));
       map.setCenter(new GLatLng(tagged_place["place"]["location"]["latitude"], tagged_place["place"]["location"]["longitude"]), 16);
-      $('#sparkMap').append('<a href="https://www.facebook.com/'+tagged_place["place"]["id"]+'" target="_blank">'+tagged_place["place"]["name"]+"</a>");
+
+      $('#sparkMapLink').attr("href", "https://www.facebook.com/"+tagged_place["place"]["id"]);
     });
-    $('#sparkers').hide();
+    
+    $('#sparkers').css({opacity: 0});
+    $('#sparkers').show();
+    
+    setTimeout(function(){
+      
+    }, 500);
     $('#fb_button').hide();
+
   }

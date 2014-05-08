@@ -6,19 +6,55 @@
 </div>
 <div id="status">
 </div>
-  <div id="waiting">Connecting to chat server...</div>
-  <div id="second_counter"></div>
+<div id="waiting">Connecting to chat server...</div>
+
+<div id="mind">
   <div id="conversation"></div>
   <div id="sparkers" style="display: none;">
-  	<div id="sparkPhoto" class="spark"><h4>Photo Tagged</h4></div>
-  	<div id="sparkPhotoUp" class="spark"><h4>Photo Uploaded</h4></div>	
-  	<div id="sparkVideo" class="spark"><h4>Video Tagged</h4></div>
-  	<div id="sparkStatus" class="spark"><h4>Status Posted</h4></div>
-  	<div id="sparkLike" class="spark"><h4>Page Liked</h4></div>
-  	<div id="sparkMap" class="spark"><h4>Location Tagged</h4><div id="map" style="height: 140px"></div> </div>
+    <div class="cont">
+  	   <div id="sparkPhoto" class="spark"><h4>Photo Tagged</h4></div>
+       
+       <div class="overlay">
+          <a href="#" id="sparkPhotoLink" ><img src="images/link-icon.png"/></a>
+          <br/><br/><br/>Spark!
+
+       </div>
+    </div>
+    <div class="cont">
+        <div id="sparkPhotoUp" class="spark"><h4>Photo Uploaded</h4></div>  
+        <div class="overlay">
+        <a href="#" id="sparkPhotoUpLink" ><img src="images/link-icon.png"/></a>
+        <br/><br/><br/>Spark!</div>
+    </div>
+    <div class="cont">
+        <div id="sparkVideo" class="spark"><h4>Video Tagged</h4></div>
+        <div class="overlay">
+        <a href="#" id="sparkVideoLink" ><img src="images/link-icon.png"/></a>
+        <br/><br/><br/>Spark!</div>
+    </div>
+    <div class="cont">
+        <div id="sparkStatus" class="spark"><h4>Status Posted</h4></div>
+        <div class="overlay">
+        <a href="#" id="sparkStatusLink"><img src="images/link-icon.png"/></a>
+        <br/><br/><br/>Spark!</div>
+    </div>
+    <div class="cont">
+        <div id="sparkLike" class="spark"><h4>Page Liked</h4></div>
+        <div class="overlay">
+        <a href="#" id="sparkLikeLink" ><img src="images/link-icon.png"/></a>
+        <br/><br/><br/>Spark!</div>
+    </div>
+    <div id="last" class="cont">
+        <div id="sparkMap" class="spark"><h4>Location Tagged</h4><div id="map" style="height: 140px"></div><br> </div>
+        <div class="overlay">
+        <a href="#" id="sparkMapLink" ><img src="images/link-icon.png"/></a>
+        <br/><br/><br/>Spark!</div>
+    </div>
+
+  	
   </div>
-  <div id="submission">
-    <input type="text" placeholder="say something..">
-  </div>
-  <div id="webcam_stream"></div>
-  <div id="video_container"></div>
+</mind>
+
+<div id="submission">
+  <input type="text" placeholder="say something..">
+</div>
