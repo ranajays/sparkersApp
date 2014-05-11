@@ -52,6 +52,7 @@ var username;
       console.log($(this).html().substring($(this).html().indexOf('</h4>')+5, $(this).html().indexOf("<br")));
       fb_instance_stream.push({m:username+": <br/><br/>" + htmlString, c: my_color});
       $('#sparkers').animate({opacity: 0}, 500);
+      $('#sparkers').hide();
     });
 
     // bind submission box
@@ -66,6 +67,7 @@ var username;
     // scroll to bottom in case there is already content
     scroll_to_bottom(1300);
     $('#sparkers').animate({opacity: 0}, 500);
+    $('#sparkers').hide();
   }
 
   // creates a message node and appends it to the conversation
@@ -74,9 +76,11 @@ var username;
     // console.log(username);
     if (data.m.indexOf(username) != 0 && has_spark(data.m)){
       $('#sparkers').animate({opacity: 1}, 500);
+      $('#sparkers').show();
     }
     else if (data.m.indexOf(username) === 0 && data.m.indexOf("#show") != -1) {
       $('#sparkers').animate({opacity: 1}, 500); 
+      $('#sparkers').show();
     }
    
   }
@@ -239,7 +243,7 @@ var username;
     });
     
     $('#sparkers').css({opacity: 0});
-    $('#sparkers').show();
+    $('#sparkers').hide();
     
     setTimeout(function(){
       
