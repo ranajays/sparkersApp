@@ -252,18 +252,16 @@ var sparksTextTemplate = document.getElementById('sparks-text-template');
     FB.api('/me/likes?limit=5&fields=id,name', function(response) {
       var likes = response["data"];
       var sparkData = [];
-
+      //for each like, find the img url 
       for (var i = 0; i < likes.length; i++) {
-        
         FB.api('/'+likes[i]["id"]+'/picture?redirect=false&height=140', (function(sparkData, like) {
-
             return function(response) {
-              console.log("sparkData: " + sparkData.length);
               sparkData.push( {
                 source: response["data"]["url"],
                 link: "https://www.facebook.com/" + like["id"]
               })
 
+              //because of async, put this here hoping they all finish
               if (sparkData.length > 4) {
                  $('#sparkLike').html(templates.renderSparksImages({
                      sparkName: "Likes",
@@ -276,14 +274,14 @@ var sparksTextTemplate = document.getElementById('sparks-text-template');
       }
     });
     
-    
+
     FB.api('/me/tagged_places?limit=1', function(response) {
       var tagged_place = response["data"][0];
       
       var map = new GMap2(document.getElementById("map"));
       map.setCenter(new GLatLng(tagged_place["place"]["location"]["latitude"], tagged_place["place"]["location"]["longitude"]), 16);
 
-      $('#sparkMapLink').attr("href", "https://www.facebook.com/"+tagged_place["place"]["id"]);
+      $('#maplink').attr("href", "https://www.facebook.com/"+tagged_place["place"]["id"]);
     });
     
     $('#sparkers').css({opacity: 1});

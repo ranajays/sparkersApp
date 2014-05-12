@@ -42,13 +42,12 @@ a {
 }
 .spark-list {
   float: left;
-  padding: 5px;
   overflow-y: scroll;
   height: 100%;
   border-color: #FFCC66;
   border-right-style: solid;
   border-width: 5px;
-  width: 16%;
+  width: 15.5%;
 }
 .fblink {
   position: absolute;
@@ -64,15 +63,15 @@ a {
   overflow: hidden;
   margin: 5px;
   border-style: solid;
-  border-color: #FFF0;
+  border-color: #B2B2B2;
   border-width: 1px;
   border-radius: 5px;
 }
 .sparkimage {
   margin: 5px;
   vertical-align: middle;
-  max-height: 95%;
-  max-width: 90%;
+  max-width: 85%;
+  height: auto;
 }
 .spark iframe {
   margin: 5px;
