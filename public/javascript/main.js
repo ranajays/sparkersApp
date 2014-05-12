@@ -30,9 +30,15 @@ function sparkerDone() {
 
     });
 
-     $('#sparkers .sparkIFrame').click(function(event) {
-      event.preventDefault();
-      alert("hi");
+     $('#sparkersToggle').click(function(event) {
+      if ($('#sparkers').is(":visible") ) {
+        $('#sparkers').animate({opacity: 0}, 500);
+        $('#sparkers').hide();
+      }
+      else {
+        $('#sparkers').animate({opacity: 1}, 500);
+        $('#sparkers').show();
+      }
      });
 
   }
@@ -308,10 +314,8 @@ function sparkerDone() {
       sparkerDone();
     });
     
-    $('#sparkers').css({opacity: 1});
-    $('#sparkers').show();
-    
-   
+    $('#sparkers').css({opacity: 0});
+    $('#sparkers').hide();
     $('#fb_button').hide();
 
   }
