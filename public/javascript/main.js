@@ -2,6 +2,16 @@
 // For CS247, Spring 2014
 var username;
 
+var sparksImagesTemplate = document.getElementById('sparks-images-template');
+var sparksVideosTemplate = document.getElementById('sparks-videos-template');
+var sparksTextTemplate = document.getElementById('sparks-text-template');
+
+ var templates = {
+        renderSparksImages: Handlebars.compile(sparksImagesTemplate.innerHTML),
+        renderSparksVideos: Handlebars.compile(sparksVideosTemplate.innerHTML),
+        renderSparksText: Handlebars.compile(sparksTextTemplate.innerHTML)
+ };
+
 (function() {
 
   var cur_video_blob = null;
@@ -199,40 +209,74 @@ var username;
         response.name;
       // username = response.name;
     });
-    FB.api('/me/likes?limit=1&fields=id,name', function(response) {
-      var like = response["data"][0];
-      // console.log(JSON.stringify(like));
-      FB.api('/'+like["id"]+'/picture?redirect=false&height=140', function(response) {
-        // console.log(JSON.stringify(response));
-        $('#sparkLike').append('<img src="'+response["data"]["url"]+'"" class="fit_spark"><br/>');
-        var link = "https://www.facebook.com/" + like["id"];
-        $('#sparkLikeLink').attr("href","https://www.facebook.com/" + like["id"]);
-      });
-    });
-    FB.api('/me/statuses?limit=1&fields=id,message,from', function(response) {
-      var status = response["data"][0];
-      console.log(JSON.stringify(status));
-      $('#sparkStatus').append('<a href="https://www.facebook.com/'+status["from"]["id"]+'_'+status["id"]+'">'+status["message"]+"</a>");
-    });
-    FB.api('/me/photos?limit=1&fields=name,source,link', function(response) {
-      var pic = response["data"][0];
-      
-      $('#sparkPhoto').append('<img src="'+pic["source"]+'"" class="fit_spark"><br/>');
-      $('#sparkPhotoLink').attr("href", pic["link"]);  
-      
-    });
-    FB.api('/me/photos/uploaded?limit=1&fields=name,source,link', function(response) {
-      var pic = response["data"][0];
-      
-      $('#sparkPhotoUp').append('<img src="'+pic["source"]+'"" class="fit_spark"><br/>');
-      $('#sparkPhotoUpLink').attr("href", pic["link"]);
-    });
-    FB.api('/me/videos?limit=1&fields=id,name,from', function(response) {
-      var video = response["data"][0];
 
-      $("#sparkVideo").append('<iframe src="https://www.facebook.com/video/embed?video_id='+video["id"]+'" width="130" height="130" frameborder="0"></iframe><br/>');
-      $('#sparkVideoLink').attr("href", "https://www.facebook.com/"+video["from"]["id"]+'_'+video["id"]);
+    // ***create sparks***
+    //Tagged photo
+    FB.api('/me/photos?limit=5&fields=name,source,link', function(response) {
+      $('#sparkPhoto').html(templates.renderSparksImages({
+          sparkName: "Photo Tagged",
+          sparks: response["data"],
+        }));
     });
+
+    //uploaded photos
+     FB.api('/me/photos/uploaded?limit=5&fields=name,source,link', function(response) {
+      $('#sparkPhotoUp').html(templates.renderSparksImages({
+          sparkName: "Photos Uploaded",
+          sparks: response["data"],
+        }));
+    });
+
+     //uploaded videos
+    FB.api('/me/videos?limit=3&fields=id,name,from', function(response) {
+      $('#sparkVideo').html(templates.renderSparksVideos({
+          sparkName: "Videos Uploaded",
+          sparks: response["data"],
+      }));
+    });
+
+    //Statuses
+    FB.api('/me/statuses?limit=5&fields=id,message,from', function(response) {
+      var status = response["data"][0];
+      console.log("statuses data: " + response["data"]); // THIS ALWAYS RETURNS EMPTY???
+
+      $('#sparkStatus').html(templates.renderSparksText({
+          sparkName: "Statuses",
+          sparks: response["data"],
+      }));
+
+      //$('#sparkStatus').append('<a href="https://www.facebook.com/'+status["from"]["id"]+'_'+status["id"]+'">'+status["message"]+"</a>");
+    });
+
+    //Likes
+    FB.api('/me/likes?limit=5&fields=id,name', function(response) {
+      var likes = response["data"];
+      var sparkData = [];
+
+      for (var i = 0; i < likes.length; i++) {
+        
+        FB.api('/'+likes[i]["id"]+'/picture?redirect=false&height=140', (function(sparkData, like) {
+
+            return function(response) {
+              console.log("sparkData: " + sparkData.length);
+              sparkData.push( {
+                source: response["data"]["url"],
+                link: "https://www.facebook.com/" + like["id"]
+              })
+
+              if (sparkData.length > 4) {
+                 $('#sparkLike').html(templates.renderSparksImages({
+                     sparkName: "Likes",
+                    sparks: sparkData,
+                  }));
+              }
+            }
+          })(sparkData, likes[i])
+        );
+      }
+    });
+    
+    
     FB.api('/me/tagged_places?limit=1', function(response) {
       var tagged_place = response["data"][0];
       
@@ -242,8 +286,8 @@ var username;
       $('#sparkMapLink').attr("href", "https://www.facebook.com/"+tagged_place["place"]["id"]);
     });
     
-    $('#sparkers').css({opacity: 0});
-    $('#sparkers').hide();
+    $('#sparkers').css({opacity: 1});
+    $('#sparkers').show();
     
     setTimeout(function(){
       

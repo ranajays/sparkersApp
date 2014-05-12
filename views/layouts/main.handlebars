@@ -4,16 +4,65 @@
     <meta charset="utf-8" />
     <title>Conversation Sparkers</title>
 	<link rel="stylesheet" href='/stylesheets/main.css'>
-    <script src='https://cdn.firebase.com/js/client/1.0.6/firebase.js'></script>
-    <script src='javascript/jquery-1.11.0.min.js'></script>
-    <script src='javascript/MediaStreamRecorder.js'></script>
-    <script src='javascript/main.js'></script>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false" 
-           type="text/javascript"></script>
+
 </head>
 <body>
 
     {{{body}}}
 
+
+ <!-- Handlebars templates -->
+    <script type="text/x-handlebars-template" id="sparks-images-template">
+        <h4> \{{ sparkName }} </h4>
+        \{{#if sparks}}
+            \{{#each sparks}}
+                <div class="spark">
+                    <img src="\{{this.source}}" class="sparkimage"></img>
+                    <a href="\{{this.link}}" target="_blank"  >
+                    <img src="images/link-icon.png" class="fblink"/></a>
+                </div>
+            \{{/each}}
+        \{{else }}             
+            No recent Items
+        \{{/if}}
+    </script>
+
+    <script type="text/x-handlebars-template" id="sparks-videos-template">
+        <h4> \{{ sparkName }} </h4>
+        \{{#if sparks}}       
+            \{{#each sparks}}
+                <div class="spark">
+                    <iframe src="https://www.facebook.com/video/embed?video_id=\{{this.id}}" width="130" height="130" frameborder="0"></iframe>
+                    <a href="https://www.facebook.com/\{{this.from.id}}_\{{this.id}}" target="_blank"  >
+                    <img src="images/link-icon.png" class="fblink"/></a>
+                </div>
+            \{{/each}}
+        \{{else }}             
+            No recent Items
+        \{{/if}}
+    </script>
+
+    <script type="text/x-handlebars-template" id="sparks-text-template">
+        <h4> \{{ sparkName }} </h4>
+         \{{#if sparks}}       
+            \{{#each sparks}}
+                <div class="spark">
+                    \{{this.message}}
+                    <a href="https://www.facebook.com/\{{this.from.id}}_\{{this.id}}" target="_blank"  >
+                    <img src="images/link-icon.png" class="fblink"/></a>
+                </div>
+            \{{/each}}
+        \{{else }}             
+               No recent Items
+        \{{/if}}
+    </script>
+
+    <script src='https://cdn.firebase.com/js/client/1.0.6/firebase.js'></script>
+    <script src='javascript/jquery-1.11.0.min.js'></script>
+    <script src='javascript/MediaStreamRecorder.js'></script>
+    <script type="text/javascript" src="javascript/handlebars.js"></script>
+    <script src='javascript/main.js'></script>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false" 
+           type="text/javascript"></script>
 </body>
 </html>
