@@ -1,6 +1,10 @@
 // Initial code by Borui Wang, updated by Graham Roth
 // For CS247, Spring 2014
 var username;
+var fb_new_chat_room;
+var fb_instance_users;
+var fb_instance_stream;
+var my_color;
 
 var sparksImagesTemplate = document.getElementById('sparks-images-template');
 var sparksVideosTemplate = document.getElementById('sparks-videos-template');
@@ -11,6 +15,28 @@ var sparksTextTemplate = document.getElementById('sparks-text-template');
         renderSparksVideos: Handlebars.compile(sparksVideosTemplate.innerHTML),
         renderSparksText: Handlebars.compile(sparksTextTemplate.innerHTML)
  };
+
+var sparkerSemaphore = 6;
+function sparkerDone() {
+  sparkerSemaphore -= 1;
+  if (sparkerSemaphore == 0) {
+    $('#sparkers .spark').click(function(event) {
+      event.preventDefault();
+      var html = $("<div />").append($(this).clone()).html();
+      fb_instance_stream.push({m:username+": <br/><br/>" + html, c: my_color});
+
+      $('#sparkers').animate({opacity: 0}, 500);
+      $('#sparkers').hide();
+
+    });
+
+     $('#sparkers .sparkIFrame').click(function(event) {
+      event.preventDefault();
+      alert("hi");
+     });
+
+  }
+}
 
 (function() {
 
@@ -36,10 +62,10 @@ var sparksTextTemplate = document.getElementById('sparks-text-template');
     display_msg({m:"Share this url with your friend to join this chat: "+ document.location.origin+"/#"+fb_chat_room_id,c:"red"})
 
     // set up variables to access firebase data structure
-    var fb_new_chat_room = fb_instance.child('chatrooms').child(fb_chat_room_id);
-    var fb_instance_users = fb_new_chat_room.child('users');
-    var fb_instance_stream = fb_new_chat_room.child('stream');
-    var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
+    fb_new_chat_room = fb_instance.child('chatrooms').child(fb_chat_room_id);
+    fb_instance_users = fb_new_chat_room.child('users');
+    fb_instance_stream = fb_new_chat_room.child('stream');
+    my_color = "#"+((1<<24)*Math.random()|0).toString(16);
 
     // listen to events
     fb_instance_users.on("child_added",function(snapshot){
@@ -56,14 +82,6 @@ var sparksTextTemplate = document.getElementById('sparks-text-template');
     }
     fb_instance_users.push({ name: username,c: my_color});
     $("#waiting").remove();
-
-    $('.cont').click(function(){
-      var htmlString = $(this).html().substring($(this).html().indexOf('</h4>')+5, $(this).html().indexOf("<br"));
-      console.log($(this).html().substring($(this).html().indexOf('</h4>')+5, $(this).html().indexOf("<br")));
-      fb_instance_stream.push({m:username+": <br/><br/>" + htmlString, c: my_color});
-      $('#sparkers').animate({opacity: 0}, 500);
-      $('#sparkers').hide();
-    });
 
     // bind submission box
     $("#submission input").keydown(function( event ) {
@@ -217,6 +235,7 @@ var sparksTextTemplate = document.getElementById('sparks-text-template');
           sparkName: "Photo Tagged",
           sparks: response["data"],
         }));
+        sparkerDone();
     });
 
     //uploaded photos
@@ -225,6 +244,7 @@ var sparksTextTemplate = document.getElementById('sparks-text-template');
           sparkName: "Photos Uploaded",
           sparks: response["data"],
         }));
+      sparkerDone();
     });
 
      //uploaded videos
@@ -233,6 +253,7 @@ var sparksTextTemplate = document.getElementById('sparks-text-template');
           sparkName: "Videos Uploaded",
           sparks: response["data"],
       }));
+      sparkerDone();
     });
 
     //Statuses
@@ -244,6 +265,7 @@ var sparksTextTemplate = document.getElementById('sparks-text-template');
           sparkName: "Statuses",
           sparks: response["data"],
       }));
+      sparkerDone();
 
       //$('#sparkStatus').append('<a href="https://www.facebook.com/'+status["from"]["id"]+'_'+status["id"]+'">'+status["message"]+"</a>");
     });
@@ -267,6 +289,7 @@ var sparksTextTemplate = document.getElementById('sparks-text-template');
                      sparkName: "Likes",
                     sparks: sparkData,
                   }));
+                 sparkerDone();
               }
             }
           })(sparkData, likes[i])
@@ -282,14 +305,13 @@ var sparksTextTemplate = document.getElementById('sparks-text-template');
       map.setCenter(new GLatLng(tagged_place["place"]["location"]["latitude"], tagged_place["place"]["location"]["longitude"]), 16);
 
       $('#maplink').attr("href", "https://www.facebook.com/"+tagged_place["place"]["id"]);
+      sparkerDone();
     });
     
     $('#sparkers').css({opacity: 1});
     $('#sparkers').show();
     
-    setTimeout(function(){
-      
-    }, 500);
+   
     $('#fb_button').hide();
 
   }

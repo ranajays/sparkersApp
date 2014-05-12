@@ -16,11 +16,13 @@
         <h4> \{{ sparkName }} </h4>
         \{{#if sparks}}
             \{{#each sparks}}
-                <div class="spark">
-                    <img src="\{{this.source}}" class="sparkimage"></img>
-                    <a href="\{{this.link}}" target="_blank"  >
-                    <img src="images/link-icon.png" class="fblink"/></a>
-                </div>
+                <a href="#">
+                    <div class="spark">
+                        <img src="\{{this.source}}" class="sparkimage"></img>
+                        <a href="\{{this.link}}" target="_blank"  >
+                        <img src="images/link-icon.png" class="fblink"/></a>
+                    </div>
+                </a>
             \{{/each}}
         \{{else }}             
             No recent Items
@@ -31,11 +33,13 @@
         <h4> \{{ sparkName }} </h4>
         \{{#if sparks}}       
             \{{#each sparks}}
+            <a href="#">
                 <div class="spark">
-                    <iframe src="https://www.facebook.com/video/embed?video_id=\{{this.id}}" width="130" height="130" frameborder="0"></iframe>
+                    <iframe src="https://www.facebook.com/video/embed?video_id=\{{this.id}}" class="sparkIFrame" width="130" height="130" frameborder="0"></iframe>
                     <a href="https://www.facebook.com/\{{this.from.id}}_\{{this.id}}" target="_blank"  >
                     <img src="images/link-icon.png" class="fblink"/></a>
                 </div>
+            </a>
             \{{/each}}
         \{{else }}             
             No recent Items
@@ -56,8 +60,6 @@
                No recent Items
         \{{/if}}
     </script>
-
-    
 
     <script src='https://cdn.firebase.com/js/client/1.0.6/firebase.js'></script>
     <script src='javascript/jquery-1.11.0.min.js'></script>
