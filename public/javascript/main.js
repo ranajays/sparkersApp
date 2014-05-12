@@ -21,7 +21,6 @@ function sparkerDone() {
   sparkerSemaphore -= 1;
   if (sparkerSemaphore == 0) {
     $('#sparkers .spark').click(function(event) {
-      event.preventDefault();
       var html = $("<div />").append($(this).clone()).html();
       fb_instance_stream.push({m:username+": <br/><br/>" + html, c: my_color});
 
