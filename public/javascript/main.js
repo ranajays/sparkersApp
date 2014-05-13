@@ -40,11 +40,11 @@ function sparkerDone() {
 
      $('#sparkersToggle').click(function(event) {
       if ($('#sparkers').is(":visible") ) {
-        $('#sparkers').css({opacity: 0}, 500);
+        $('#sparkers').animate({opacity: 0}, 500);
         $('#sparkers').hide();
       }
       else {
-        $('#sparkers').css({opacity: 1}, 500);
+        $('#sparkers').animate({opacity: 1}, 500);
         $('#sparkers').show();
       }
      });
@@ -284,9 +284,11 @@ function sparkerDone() {
       for (var i = 0; i < likes.length; i++) {
         FB.api('/'+likes[i]["id"]+'/picture?redirect=false&height=140', (function(sparkData, like) {
             return function(response) {
+             // console.log(JSON.stringify(response));
               sparkData.push( {
                 source: response["data"]["url"],
-                link: "https://www.facebook.com/" + like["id"]
+                link: "https://www.facebook.com/" + like["id"],
+                name: like["name"]
               })
 
               //because of async, put this here hoping they all finish
@@ -309,7 +311,7 @@ function sparkerDone() {
       
       var map = new GMap2(document.getElementById("map"));
       map.setCenter(new GLatLng(tagged_place["place"]["location"]["latitude"], tagged_place["place"]["location"]["longitude"]), 16);
-
+      $('#mapTitle').html(tagged_place["place"]["name"]);
       $('#maplink').attr("href", "https://www.facebook.com/"+tagged_place["place"]["id"]);
       sparkerDone();
     });

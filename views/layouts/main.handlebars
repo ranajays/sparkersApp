@@ -16,13 +16,12 @@
         <h4> \{{ sparkName }} </h4>
         \{{#if sparks}}
             \{{#each sparks}}
-                <a href="#">
                     <div class="spark">
+                        \{{this.name}}<br/>
                         <img src="\{{this.source}}" class="sparkimage"></img>
                         <a href="\{{this.link}}" target="_blank"  >
                         <img src="images/link-icon.png" class="fblink"/></a>
                     </div>
-                </a>
             \{{/each}}
         \{{else }}             
             No recent Items
@@ -33,13 +32,12 @@
         <h4> \{{ sparkName }} </h4>
         \{{#if sparks}}       
             \{{#each sparks}}
-            <a href="#">
                 <div class="spark">
+                    \{{name}}</br>
                     <iframe src="https://www.facebook.com/video/embed?video_id=\{{this.id}}" class="sparkIFrame" frameborder="0"></iframe>
                     <a href="https://www.facebook.com/\{{this.from.id}}_\{{this.id}}" target="_blank"  >
                     <img src="images/link-icon.png" class="fblink"/></a>
                 </div>
-            </a>
             \{{/each}}
         \{{else }}             
             No recent Items
