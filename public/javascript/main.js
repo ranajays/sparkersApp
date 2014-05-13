@@ -81,7 +81,7 @@ function sparkerDone() {
     });
 
     // block until username is answered
-    username = "";//window.prompt("Welcome, warrior! please declare your name?");
+    username = window.prompt("Welcome, warrior! please declare your name?");
     if(!username){
       username = "anonymous"+Math.floor(Math.random()*1111);
     }
