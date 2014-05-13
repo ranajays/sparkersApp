@@ -16,6 +16,13 @@ var sparksTextTemplate = document.getElementById('sparks-text-template');
         renderSparksText: Handlebars.compile(sparksTextTemplate.innerHTML)
  };
 
+function scroll_to_bottom(wait_time){
+    // scroll to bottom of div
+    setTimeout(function(){
+      $("html, body").animate({ scrollTop: $(document).height() }, 200);
+    },wait_time);
+  }
+
 var sparkerSemaphore = 6;
 function sparkerDone() {
   sparkerSemaphore -= 1;
@@ -27,15 +34,17 @@ function sparkerDone() {
       $('#sparkers').animate({opacity: 0}, 500);
       $('#sparkers').hide();
 
+      scroll_to_bottom();
+
     });
 
      $('#sparkersToggle').click(function(event) {
       if ($('#sparkers').is(":visible") ) {
-        $('#sparkers').animate({opacity: 0}, 500);
+        $('#sparkers').css({opacity: 0}, 500);
         $('#sparkers').hide();
       }
       else {
-        $('#sparkers').animate({opacity: 1}, 500);
+        $('#sparkers').css({opacity: 1}, 500);
         $('#sparkers').show();
       }
      });
@@ -117,14 +126,6 @@ function sparkerDone() {
     }
    
   }
-
-  function scroll_to_bottom(wait_time){
-    // scroll to bottom of div
-    setTimeout(function(){
-      $("html, body").animate({ scrollTop: $(document).height() }, 200);
-    },wait_time);
-  }
-
 
   // check to see if a message qualifies to be replaced with video.
   var has_spark = function(msg){

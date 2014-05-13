@@ -76,7 +76,8 @@ a {
 }
 .spark {
   position: relative;
-  max-height: 70%;
+  height: 70%;
+  width: auto;
   margin: 2%;
   overflow: hidden;
   margin: 5px;
@@ -84,6 +85,10 @@ a {
   border-color: #B2B2B2;
   border-width: 1px;
   border-radius: 5px;
+}
+.spark iframe {
+  width: 70%;
+  height: 70%;
 }
 .sparkimage {
   margin: 5px;
