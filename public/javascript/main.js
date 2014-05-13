@@ -40,10 +40,12 @@ function sparkerDone() {
 
      $('#sparkersToggle').click(function(event) {
       if ($('#sparkers').is(":visible") ) {
+        event.preventDefault();
         $('#sparkers').animate({opacity: 0}, 500);
         $('#sparkers').hide();
       }
       else {
+        event.preventDefault();
         $('#sparkers').animate({opacity: 1}, 500);
         $('#sparkers').show();
       }
