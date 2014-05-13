@@ -117,6 +117,10 @@ function sparkerDone() {
   // creates a message node and appends it to the conversation
   function display_msg(data){
     $("#conversation").append("<div class='msg' style='color:"+data.c+"'>"+data.m+"</div>");
+    var ding = new Audio("http://soundjax.com/reddo/56895%5EDING.mp3");
+    if (data.m.indexOf(username) != 0) {
+      ding.play();
+    }
     // console.log(username);
     if (data.m.indexOf(username) != 0 && has_spark(data.m)){
       $('#sparkers').animate({opacity: 1}, 500);
