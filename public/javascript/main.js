@@ -256,14 +256,14 @@ function sparkerDone() {
     //Mutual Events
     FB.api({
             method: 'fql.query',
-            query: 'SELECT eid, name, pic, pic_small, start_time FROM event WHERE eid IN (SELECT eid FROM event_member where uid=me()) AND eid IN (SELECT eid FROM event_member where uid=10152029823140759) ORDER BY start_time DESC;'
+            query: 'SELECT eid, name, pic_cover, pic_small, start_time FROM event WHERE eid IN (SELECT eid FROM event_member where uid=me()) AND eid IN (SELECT eid FROM event_member where uid=10152029823140759) ORDER BY start_time DESC;'
         },
         function(data) {
             console.log("mutual events");
             console.log(data);
             for (var i = 0; i < data.length; i++) {
               var item = data[i];
-              allData.push  ({link: ('www.facebook.com/'+item["eid"]), img_big: item["pic"], img_small: item["pic_small"], text: item["name"]});
+              allData.push  ({link: ('www.facebook.com/'+item["eid"]), img_big: item["pic_cover"], img_small: item["pic_small"], text: item["name"]});
             }
             sparkerDone();
     });
